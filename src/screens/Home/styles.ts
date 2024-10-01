@@ -96,7 +96,20 @@ export const style = StyleSheet.create({
   },
   finishedTasksContainer:{
     flexDirection: "row",
-    
+  },
+  listEmpty: {
+    alignItems: "center",
+    gap: 18,
+    marginTop: 60
+  },
+  listEmptyMainText: {
+    color: "#333333",
+    fontWeight: "bold"
+  },
+  listEmptyText: {
+    textAlign: "center",
+    maxWidth: 250,
+    color: "#333333"
   }
 
 });
