@@ -6,7 +6,13 @@ import Trash from ".././../assets/trash.svg";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 
-export function  Task(){
+interface TaskProps{
+  description: String;
+  onRemoveTask: () => void;
+  onTaskcompletion: (isChecked: boolean) => void;
+}
+
+export function  Task({ description, onRemoveTask,onTaskcompletion }: TaskProps){
   return(
     <View style={style.container}>
       <BouncyCheckbox
@@ -15,14 +21,17 @@ export function  Task(){
         unFillColor="transparent"
         iconStyle={{ borderColor: "red" }}
         innerIconStyle={{ borderWidth: 2 }}
-        onPress={(isChecked: boolean) => {console.log(isChecked)}}
+        onPress={(isChecked: boolean) => {onTaskcompletion(isChecked)}}
       />
       <View style={style.taskDescriptionContainer}>
         <Text style={style.taskDescription}>
-          Limpar casa impar casa impar casa impar  impar impar impar impar sdbhdbchjzbx
+          {  description }
         </Text>
       </View>
-      <TouchableOpacity style={style.button}>
+      <TouchableOpacity 
+        style={style.button}
+        onPress={onRemoveTask}
+      >
         <Trash/>
       </TouchableOpacity>
     </View>
