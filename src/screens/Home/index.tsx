@@ -1,20 +1,64 @@
-import { Text, View, Image, TextInput, TouchableOpacity, ToastAndroid } from "react-native";
+import { Text, View, Image, TextInput, TouchableOpacity, ToastAndroid, FlatList, Alert } from "react-native";
 import {style} from "./styles";
 import Logo from "../../../assets/logo.svg";
 import Plus from "../../../assets/plus.svg";
+import Clipboard from "../../../assets/clipboard.svg";
 import { useState } from "react";
 import { Task } from "../../../components/Task";
+import { Divider } from '@rneui/themed';
+import uuid from "react-native-uuid";
+
+
+interface Tasks {
+  checked?: Boolean,
+  description: string,
+  id: number,
+}
 
 export function Home(){
   const [isInputFocused, setInputFocused] = useState<Boolean>(false);
+  const [tasks, setTasks] = useState<Tasks[]>([]);
+  const [completedTasksAmount, setCompletedTasksAmount] = useState(0);
+  const [taskDescription, setTaskDescription] = useState<string>("")
 
-  function handleFocus(){
-    setInputFocused(true);
+  function handleNewTaskAdd(description: string){
+    if(tasks.some(item => item.description === description) ){
+      Alert.alert("Já existe uma tarefa com essa descrição!");
+      return setTaskDescription("");
+    }
+    const newTask: Tasks = {
+      description: description,
+      id: Math.random(),
+    };
+
+    setTasks(prevState => [...prevState, newTask]);
+    setTaskDescription("");
   }
 
-  function handleBlur(){
-    setInputFocused(false);
+  function handleToggleTaskCompletion(id: number, isChecked?: boolean){
+    const newTasks = tasks.map(task => task.id === id ? {...task, checked: isChecked} : task)
+    setTasks(newTasks);
+
+    if(isChecked){
+      setCompletedTasksAmount(completedTasksAmount + 1)
+    }else{
+      setCompletedTasksAmount(completedTasksAmount - 1)
+    }
   }
+
+  function handleTaskRemove(description: string){
+    Alert.alert("Deletar tarefa", `Deletar a tarefa ${description}?`, [
+      {
+        text: "sim",
+        onPress: () => setTasks(prevState => prevState.filter(task => task.description !== description))
+      },
+      {
+        text: "não",
+        style: "cancel"
+      }
+    ]);
+  }
+
   return(
     <View style={style.wrapper}>
       <View style={style.header}>
@@ -26,10 +70,13 @@ export function Home(){
             style={style.input }
             placeholder="Adicione uma nova tarefa"
             placeholderTextColor="#F2F2F2"
-            onFocus={handleFocus}
-            onBlur={handleBlur}
+            onChangeText={(text) => setTaskDescription(text)}
+            defaultValue={taskDescription}
           />
-          <TouchableOpacity style={style.button}>
+          <TouchableOpacity 
+            style={style.button}
+            onPress={() => handleNewTaskAdd(taskDescription)}
+          >
             <Text style={style.textButton}>
               <Plus/>
             </Text>
@@ -44,7 +91,7 @@ export function Home(){
               style={style.createdTasksAmount}
               activeOpacity={5}
             >
-              <Text style={style.content}>3</Text>
+              <Text style={style.content}>{tasks.length}</Text>
             </TouchableOpacity>
           </View>
           <View style={style.finishedTasksContainer}>
@@ -53,11 +100,32 @@ export function Home(){
               style={style.fineshedTasksAmount}
               activeOpacity={5}
             >
-              <Text style={style.content}>6</Text>
+              <Text style={style.content}>{completedTasksAmount}</Text>
             </TouchableOpacity>
           </View>
         </View>
-        <Task/>
+        <Divider/>
+        <FlatList
+          data={tasks}
+          keyExtractor={(item) => item.description}
+          renderItem={({item}) => (
+            <Task
+              key={item.id}
+              description={item.description}
+              onRemoveTask={() => handleTaskRemove(item.description)}
+              onTaskcompletion={(checked: boolean) => handleToggleTaskCompletion(item.id, checked)} 
+            />
+          )}
+          ListEmptyComponent={() => (
+            <View style={style.listEmpty}>
+              <Clipboard/>
+              <Text style={style.listEmptyText}>
+                Você ainda não tem tarefas cadastradas.
+                Crie tarefas e organize seus itens a fazer.
+            </Text>
+            </View>
+          )}
+        />
       </View>
     </View>
   );
