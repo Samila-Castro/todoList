@@ -6,8 +6,6 @@ import Clipboard from "../../../assets/clipboard.svg";
 import { useState } from "react";
 import { Task } from "../../../components/Task";
 import { Divider } from '@rneui/themed';
-import uuid from "react-native-uuid";
-
 
 interface Tasks {
   checked?: Boolean,
@@ -16,7 +14,6 @@ interface Tasks {
 }
 
 export function Home(){
-  const [isInputFocused, setInputFocused] = useState<Boolean>(false);
   const [tasks, setTasks] = useState<Tasks[]>([]);
   const [completedTasksAmount, setCompletedTasksAmount] = useState(0);
   const [taskDescription, setTaskDescription] = useState<string>("")
