@@ -17,6 +17,7 @@ export function Home(){
   const [tasks, setTasks] = useState<Tasks[]>([]);
   const [completedTasksAmount, setCompletedTasksAmount] = useState(0);
   const [taskDescription, setTaskDescription] = useState<string>("")
+  const [inputOnFocus, setInputOnFocus] = useState<Boolean>(false);
 
   function handleNewTaskAdd(description: string){
     if(tasks.some(item => item.description === description) ){
@@ -56,6 +57,13 @@ export function Home(){
     ]);
   }
 
+  function handleOnFocusInput(state : Boolean){
+    setInputOnFocus(state);
+  };
+
+  function handleoutFocusInput(state : Boolean){
+    setInputOnFocus(state);
+  };
   return(
     <View style={style.wrapper}>
       <View style={style.header}>
@@ -64,11 +72,15 @@ export function Home(){
       <View style={style.mainContent}>
         <View style={style.form}>
           <TextInput
-            style={style.input }
+            style={inputOnFocus ? style.inputOnFocus : style.input}
             placeholder="Adicione uma nova tarefa"
-            placeholderTextColor="#F2F2F2"
+            placeholderTextColor="#808080"
             onChangeText={(text) => setTaskDescription(text)}
             defaultValue={taskDescription}
+            multiline
+            onFocus={()=> handleOnFocusInput(true)}
+            onBlur={()=> handleoutFocusInput(false)}
+            
           />
           <TouchableOpacity 
             style={style.button}
