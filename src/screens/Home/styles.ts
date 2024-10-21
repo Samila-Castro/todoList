@@ -31,9 +31,21 @@ export const style = StyleSheet.create({
     height: 56,
     marginRight: 3,
     fontSize: 16,
-    color: "#FFF", 
     paddingLeft: 16,
     borderWidth: 0.5,
+  },
+
+  inputOnFocus: {
+    flex: 1,
+    backgroundColor: "#262626",
+    borderRadius: 6,
+    height: 56,
+    marginRight: 3,
+    fontSize: 16,
+    color: "#FFF", 
+    paddingLeft: 16,
+    borderWidth: 1,
+    borderColor: "#8284FA"
   },
   button: {
     backgroundColor: "#1E6F9F",
