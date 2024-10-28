@@ -1,6 +1,9 @@
-# Todo List
+# Lista de Tarefas
 
-![alt-text](https://ibb.co/nf78CPD)
+<div align="center">
+  <img src="https://github.com/Samila-Castro/todoList/blob/master/images/screen.jpg" width="200" align="center"/>
+</div>
+
 
 Aplicação de controle de tarefas no estilo to-do list, que contém as seguintes funcionalidades:
 - Adicionar uma nova tarefa
